@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa a Beneficio - Eitan al Nacional 2026</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --chess-black: #1a1a1a;
+            --chess-white: #f0f0f0;
+            --chess-gold: #d4af37;
+            --chess-accent: #c0392b; /* Rojo para vendidos */
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--chess-white);
+            color: var(--chess-black);
+        }
+
+        h1, h2, h3, h4, .navbar-brand {
+            font-family: 'Cinzel', serif; /* Fuente estilo clásico/ajedrez */
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--chess-black);
+            border-bottom: 3px solid var(--chess-gold);
+        }
+        .navbar-brand, .nav-link {
+            color: var(--chess-gold) !important;
+        }
+        .nav-link:hover {
+            color: #fff !important;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-img-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            border: 5px solid var(--chess-gold);
+            overflow: hidden;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Fallback icon if image is missing */
+        .profile-fallback {
+            font-size: 80px;
+            color: var(--chess-black);
+        }
+
+        .hero-title {
+            color: var(--chess-gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Section Styling */
+        section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '♟️';
+            display: block;
+            font-size: 24px;
+            color: var(--chess-gold);
+            margin-top: 10px;
+        }
+
+        /* Causa */
+        .cause-card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--chess-gold);
+        }
+
+        /* Premios */
+        .bg-chess-dark {
+            background-color: var(--chess-black);
+            color: white;
+        }
+        .prize-list li {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+        .prize-icon {
+            color: var(--chess-gold);
+            margin-right: 10px;
+            width: 25px;
+            text-align: center;
+        }
+
+        /* Tablero de Números */
+        .chess-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            border: 4px solid var(--chess-gold);
+        }
+
+        .chess-piece {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            background-color: white;
+        }
+
+        .chess-piece:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .chess-piece i {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+
+        .chess-piece span {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Estilos para piezas disponibles y vendidas */
+        .piece-available {
+            background-color: white;
+            color: var(--chess-black);
+            border: 2px solid #ccc;
+        }
+        .piece-available:nth-child(even) {
+            background-color: #e0e0e0; /* Efecto tablero suave */
+        }
+        .piece-available:hover {
+            background-color: var(--chess-gold);
+            border-color: white;
+            color: white;
+        }
+
+        .piece-sold {
+            background-color: var(--chess-accent);
+            color: white;
+            opacity: 0.6;
+            cursor: not-allowed;
+            border: 2px solid darkred;
+        }
+        .piece-sold:hover {
+            transform: none;
+        }
+
+        /* Pago */
+        .payment-btn {
+            font-size: 1.2rem;
+            padding: 15px 30px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            border: none;
+        }
+        .btn-whatsapp:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+        .btn-email {
+            background-color: #EA4335;
+            color: white;
+            border: none;
+        }
+        .btn-email:hover {
+            background-color: #c0392b;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--chess-black);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-top: 1px solid #444;
+        }
+
+        /* Mobile Adjustments */
+        @media (min-width: 768px) {
+            .chess-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            .hero-title {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-chess-knight"></i> Eitan 2026</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#causa">La Causa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#premios">Premios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#numeros">Números</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pago">Datos de Pago</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <!-- Foto de Eitan -->
+            <div class="profile-img-container">
+                <!-- Fallback para cuando no hay imagen, usa onerror para ocultar img rota y mostrar icono -->
+                <img src="img/foto.png" alt="Eitan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-chess-king profile-fallback\'></i>'">
+            </div>
+            
+            <h1 class="hero-title">GRAN RIFA A BENEFICIO</h1>
+            <h2 class="h4 mb-4 text-light">Eitan al Nacional Infantil de Ajedrez 2026</h2>
+            <p class="lead mb-4">📍 Estadio Nacional – Santiago | 📅 Del 3 al 8 de febrero de 2026</p>
+            <a href="#numeros" class="btn btn-lg btn-outline-warning rounded-pill px-5">¡Quiero Apoyar!</a>
+        </div>
+    </header>
+
+    <!-- Sección Causa -->
+    <section id="causa">
+        <div class="container">
+            <h2 class="section-title">Nuestra Jugada Maestra</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card cause-card bg-white p-4">
+                        <p class="lead">
+                            Nuestro hijo <strong>Eitan</strong> ha sido seleccionado para participar en el <strong>Nacional Infantil de Ajedrez 2026</strong>, un gran desafío que representa crecimiento, disciplina y aprendizaje.
+                        </p>
+                        <hr>
+                        <p>Con esta rifa buscamos reunir fondos para cubrir:</p>
+                        <div class="row text-center mt-4">
+                            <div class="col-6 col-md-4 mb-3">
+                                <i class="fas fa-plane fa-2x text-secondary mb-2"></i><br>Pasajes a Santiago
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
+                                <i class="fas fa-taxi fa-2x text-secondary mb-2"></i><br>Traslados
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
+                                <i class="fas fa-file-signature fa-2x text-secondary mb-2"></i><br>Inscripción
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
+                                <i class="fas fa-utensils fa-2x text-secondary mb-2"></i><br>Alimentación
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
+                                <i class="fas fa-hotel fa-2x text-secondary mb-2"></i><br>Estadía
+                            </div>
+                        </div>
+                        <p class="text-center mt-3 fw-bold">¡Cada aporte suma y nos acerca a cumplir este sueño!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Premios -->
+    <section id="premios" class="bg-light">
+        <div class="container">
+            <h2 class="section-title">Premios en Juego</h2>
+            <div class="row g-4">
+                <!-- Premios Principales -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-chess-dark text-warning text-center">
+                            <h4 class="m-0"><i class="fas fa-trophy"></i> Principales</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="prize-list p-0">
+                                <li><i class="fas fa-microphone prize-icon"></i>Micrófono Lavalier inalámbrico K60</li>
+                                <li><i class="fas fa-weight prize-icon"></i>Balanza digital inteligente</li>
+                                <li><i class="fas fa-utensils prize-icon"></i>2 docenas de empanadas chinas</li>
+                                <li><i class="fas fa-utensils prize-icon"></i>1 docena de empanadas chinas</li>
+                                <li><i class="fas fa-tshirt prize-icon"></i>Sudadera Dragon Ball Z</li>
+                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (x2)</li>
+                                <li><i class="fas fa-wind prize-icon"></i>Mini humidificador de aire</li>
+                                <li><i class="fas fa-mobile-alt prize-icon"></i>Trípode para teléfono móvil</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premios Medios -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-secondary text-white text-center">
+                            <h4 class="m-0"><i class="fas fa-star"></i> Medios</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="prize-list p-0">
+                                <li><i class="fas fa-lightbulb prize-icon"></i>Mini linterna LED recargable</li>
+                                <li><i class="fas fa-jedi prize-icon"></i>Sable de luz LED</li>
+                                <li><i class="fas fa-sun prize-icon"></i>Protector solar transpirable</li>
+                                <li><i class="fas fa-baby prize-icon"></i>Set juguetes Montessori</li>
+                                <li><i class="fas fa-paw prize-icon"></i>Kit de huellas para bebés</li>
+                                <li><i class="fas fa-glasses prize-icon"></i>Gafas de sol</li>
+                                <li><i class="fas fa-soap prize-icon"></i>4 almohadillas de fregona</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premios Pequeños -->
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-header bg-secondary text-white text-center">
+                            <h4 class="m-0"><i class="fas fa-gift"></i> Utilitarios</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="prize-list p-0">
+                                <li><i class="fas fa-mitten prize-icon"></i>Par de guantes de nitrilo</li>
+                                <li><i class="fas fa-cut prize-icon"></i>Maquinilla de afeitar manual</li>
+                                <li><i class="fas fa-egg prize-icon"></i>Batidor de huevos</li>
+                                <li><i class="fas fa-baby-carriage prize-icon"></i>Cepillo silicona botella</li>
+                                <li><i class="fas fa-band-aid prize-icon"></i>Vendaje adhesivo médico</li>
+                                <li><i class="fas fa-child prize-icon"></i>Rodillera para bebé</li>
+                                <li><i class="fas fa-box prize-icon"></i>Cubiertas desechables alimentos</li>
+                                <li><i class="fas fa-socks prize-icon"></i>Calcetines de playa (T38)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Números -->
+    <section id="numeros">
+        <div class="container text-center">
+            <h2 class="section-title">El Tablero de la Suerte</h2>
+            <p class="lead mb-2">Valor del número: <strong>$1.000 CLP</strong></p>
+            <p class="text-muted mb-4"><span class="badge bg-danger">Rojo</span> = Vendido / <span class="badge bg-light text-dark border">Blanco</span> = Disponible</p>
+            
+            <div class="chess-grid" id="grid-numeros">
+                <!-- Se rellena con JS -->
+            </div>
+            
+            <div class="mt-4">
+                <p class="small fst-italic">Elige tu número y ve a la sección de pago 👇</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Pago -->
+    <section id="pago" class="bg-dark text-white">
+        <div class="container">
+            <h2 class="section-title text-white">Confirma tu Jugada</h2>
+            <div class="row justify-content-center">
+                
+                <!-- Datos Bancarios -->
+                <div class="col-lg-5 mb-4">
+                    <div class="card text-dark h-100">
+                        <div class="card-body p-4 text-center">
+                            <h4 class="card-title mb-4">Datos de Transferencia</h4>
+                            <ul class="list-unstyled text-start d-inline-block">
+                                <li class="mb-2"><i class="fas fa-university text-warning me-2"></i> <strong>Banco:</strong> Cuenta RUT (BancoEstado)</li>
+                                <li class="mb-2"><i class="fas fa-fingerprint text-warning me-2"></i> <strong>RUT:</strong> 17.879.138-9</li>
+                                <li class="mb-2"><i class="fas fa-user text-warning me-2"></i> <strong>Nombre:</strong> Jonathan Matus</li>
+                                <li class="mb-2"><i class="fas fa-envelope text-warning me-2"></i> <strong>Correo:</strong> jonathan.matus.vidal@gmail.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="col-lg-5">
+                    <div class="card text-dark h-100 bg-transparent border-0">
+                        <div class="card-body p-0 d-flex flex-column justify-content-center">
+                            <p class="text-white text-center mb-4">Una vez realizada la transferencia, envíanos el comprobante y el número que elegiste:</p>
+                            
+                            <!-- Botón WhatsApp -->
+                            <a href="https://wa.me/56990697854?text=Hola!%20Quiero%20comprar%20un%20número%20para%20la%20rifa%20de%20Eitan.%20Ya%20hice%20la%20transferencia." 
+                               target="_blank" 
+                               class="btn payment-btn btn-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Enviar a WhatsApp
+                            </a>
+
+                            <!-- Botón Correo -->
+                            <a href="mailto:jonathan.matus.vidal@gmail.com?subject=Comprobante%20Rifa%20Eitan&body=Hola,%20adjunto%20comprobante%20de%20pago%20para%20la%20rifa.%20El%20numero%20que%20quiero%20es:..." 
+                               class="btn payment-btn btn-email">
+                                <i class="fas fa-envelope"></i> Enviar por Correo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p class="mb-2">¡Muchas gracias por compartir y apoyar!</p>
+            <small class="text-muted">Rumbo al Nacional de Ajedrez 2026 ♟️✨</small>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script para lógica de números -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // ==========================================
+            // CONFIGURACIÓN DE NÚMEROS VENDIDOS
+            // ==========================================
+            // Simplemente agrega los números vendidos dentro de los corchetes separados por comas.
+            // Ejemplo: const numerosVendidos = [1, 5, 10, 22, 150];
+            
+            const numerosVendidos = [
+                1, 2, 5, 23, 100 // <--- ¡EDITA AQUÍ TUS NÚMEROS VENDIDOS!
+            ]; 
+
+            // ==========================================
+            
+            const totalNumeros = 150;
+            const gridContainer = document.getElementById('grid-numeros');
+            let htmlContent = '';
+
+            for (let i = 1; i <= totalNumeros; i++) {
+                // Verificar si está vendido
+                const isSold = numerosVendidos.includes(i);
+                
+                // Determinar clase y atributos
+                const cssClass = isSold ? 'piece-sold' : 'piece-available';
+                const icon = 'fa-chess-pawn';
+                const statusText = isSold ? 'Vendido' : 'Disponible';
+                
+                // Crear el HTML de la casilla
+                htmlContent += `
+                    <div class="chess-piece ${cssClass}" title="Número ${i} - ${statusText}">
+                        <i class="fas ${icon}"></i>
+                        <span>${i}</span>
+                    </div>
+                `;
+            }
+
+            gridContainer.innerHTML = htmlContent;
+        });
+    </script>
+</body>
+</html>
