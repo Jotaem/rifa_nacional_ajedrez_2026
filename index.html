@@ -18,12 +18,14 @@
             --chess-white: #f0f0f0;
             --chess-gold: #d4af37;
             --chess-accent: #c0392b; /* Rojo para vendidos */
+            --chess-highlight: #f1c40f; /* Amarillo selección */
         }
 
         body {
             font-family: 'Lato', sans-serif;
             background-color: var(--chess-white);
             color: var(--chess-black);
+            padding-bottom: 60px; /* Espacio para la barra flotante */
         }
 
         h1, h2, h3, h4, .navbar-brand {
@@ -189,6 +191,7 @@
             transition: transform 0.2s;
             position: relative;
             background-color: white;
+            user-select: none;
         }
 
         .chess-piece:hover {
@@ -230,6 +233,70 @@
         }
         .piece-sold:hover {
             transform: none;
+        }
+
+        /* Nuevo: Estilo Seleccionado */
+        .piece-selected {
+            background-color: var(--chess-highlight) !important;
+            color: black !important;
+            border: 3px solid #f39c12 !important;
+            transform: scale(0.95);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* Progress Bar Custom */
+        .progress-container {
+            max-width: 300px;
+            margin: 0 auto 30px;
+        }
+        .progress {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+        .progress-bar {
+            background-color: var(--chess-gold);
+        }
+
+        /* Floating Summary Bar */
+        .floating-summary {
+            position: fixed;
+            bottom: -100px; /* Oculto inicialmente */
+            left: 0;
+            width: 100%;
+            background-color: var(--chess-black);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: bottom 0.3s ease-in-out;
+            border-top: 2px solid var(--chess-gold);
+        }
+        .floating-summary.active {
+            bottom: 0;
+        }
+        .summary-info {
+            font-size: 0.9rem;
+        }
+        .summary-total {
+            color: var(--chess-gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .summary-numbers {
+            font-size: 0.8rem;
+            color: #ccc;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+            display: inline-block;
+            vertical-align: middle;
         }
 
         /* Pago */
@@ -423,7 +490,6 @@
                             <div class="col-6 col-md-3 mb-3">
                                 <i class="fas fa-taxi fa-2x text-secondary mb-2"></i><br>Traslados
                             </div>
-                            <!-- Inscripción eliminada como solicitaste -->
                             <div class="col-6 col-md-3 mb-3">
                                 <i class="fas fa-utensils fa-2x text-secondary mb-2"></i><br>Alimentación
                             </div>
@@ -513,15 +579,29 @@
     <section id="numeros">
         <div class="container text-center">
             <h2 class="section-title">El Tablero de la Suerte</h2>
+            
+            <!-- Barra de Progreso y Disponibilidad -->
+            <div class="progress-container">
+                <h5 id="disponibles-text" class="fw-bold mb-2">Quedan disponibles...</h5>
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+                </div>
+            </div>
+
             <p class="lead mb-2">Valor del número: <strong>$1.000 CLP</strong></p>
-            <p class="text-muted mb-4"><span class="badge bg-danger">Rojo</span> = Vendido / <span class="badge bg-light text-dark border">Blanco</span> = Disponible</p>
+            <p class="text-muted mb-4"><span class="badge bg-danger">Rojo</span> = Vendido / <span class="badge bg-light text-dark border">Blanco</span> = Disponible / <span class="badge" style="background-color: var(--chess-highlight); color: black;">Amarillo</span> = Tu Selección</p>
             
             <div class="chess-grid" id="grid-numeros">
                 <!-- Se rellena con JS -->
             </div>
             
+            <!-- Disclaimer -->
+            <div class="alert alert-warning mt-4 d-inline-block mx-auto" role="alert" style="max-width: 800px;">
+                <i class="fas fa-exclamation-triangle me-2"></i> <strong>Importante:</strong> Los números se confirman una vez se ha enviado el comprobante de pago. En caso contrario, aún podrían ser tomados por alguien más.
+            </div>
+
             <div class="mt-4">
-                <p class="small fst-italic">Elige tu número y ve a la sección de pago 👇</p>
+                <p class="small fst-italic">Haz clic en los números para seleccionarlos 👇</p>
             </div>
         </div>
     </section>
@@ -554,15 +634,12 @@
                             <p class="text-white text-center mb-4">Una vez realizada la transferencia, envíanos el comprobante y el número que elegiste:</p>
                             
                             <!-- Botón WhatsApp -->
-                            <a href="https://wa.me/56990697854?text=Hola!%20Quiero%20comprar%20un%20número%20para%20la%20rifa%20de%20Eitan.%20Ya%20hice%20la%20transferencia." 
-                               target="_blank" 
-                               class="btn payment-btn btn-whatsapp">
+                            <a id="btn-whatsapp" href="#" target="_blank" class="btn payment-btn btn-whatsapp">
                                 <i class="fab fa-whatsapp"></i> Enviar a WhatsApp
                             </a>
 
                             <!-- Botón Correo -->
-                            <a href="mailto:jonathan.matus.vidal@gmail.com?subject=Comprobante%20Rifa%20Eitan&body=Hola,%20adjunto%20comprobante%20de%20pago%20para%20la%20rifa.%20El%20numero%20que%20quiero%20es:..." 
-                               class="btn payment-btn btn-email">
+                            <a id="btn-email" href="#" class="btn payment-btn btn-email">
                                 <i class="fas fa-envelope"></i> Enviar por Correo
                             </a>
                         </div>
@@ -614,10 +691,20 @@
         </div>
     </div>
 
+    <!-- Barra Flotante de Resumen -->
+    <div id="floating-bar" class="floating-summary">
+        <div class="summary-info">
+            <div class="summary-total" id="total-amount">$0</div>
+            <div class="summary-numbers" id="selected-numbers-text">Ningún número seleccionado</div>
+        </div>
+        <button onclick="scrollToPayment()" class="btn btn-warning fw-bold rounded-pill">
+            Ir a Pagar <i class="fas fa-arrow-right ms-1"></i>
+        </button>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
-            <!-- Cambio de clases para letras blancas -->
             <p class="mb-2 text-white">¡Muchas gracias por compartir y apoyar! ¡Dios le bendiga!</p>
             <small class="text-white">Rumbo al Nacional de Ajedrez 2026 ♟️✨</small>
         </div>
@@ -628,36 +715,59 @@
 
     <!-- Script para lógica de números -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // ==========================================
-            // CONFIGURACIÓN DE NÚMEROS VENDIDOS
-            // ==========================================
-            // Simplemente agrega los números vendidos dentro de los corchetes separados por comas.
-            // Ejemplo: const numerosVendidos = [1, 5, 10, 22, 150];
-            
-            const numerosVendidos = [
-                1, 12, 20, 7, 10, 21, 55, 100, 56, 2, 3, 150, 4, 9, 11, 16, 24, 28, 29, 30 // <--- ¡EDITA AQUÍ TUS NÚMEROS VENDIDOS!
-            ]; 
+        // Variables globales
+        let selectedNumbers = [];
+        const pricePerNumber = 1000;
+        
+        // Números vendidos (Base de datos simple)
+        const numerosVendidos = [ 
+            1, 12, 20, // JUDITH NUNEZ
+            7, 10, 21, 55, 100, // AYLIN MATUS
+            56, // BENJAMIN MATUS
+            2, 3, 150, // HNA CLAUDIA
+            4, 9, 11, 16, 24, 28, 29, 30, 57 // TIA ANGELICA ALIAGA
+        ];
 
-            // ==========================================
-            
+        document.addEventListener('DOMContentLoaded', function() {
             const totalNumeros = 150;
             const gridContainer = document.getElementById('grid-numeros');
             let htmlContent = '';
 
+            // 1. Calcular Disponibilidad y Barra de Progreso
+            const vendidosCount = numerosVendidos.length;
+            const disponiblesCount = totalNumeros - vendidosCount;
+            const porcentajeDisponible = (disponiblesCount / totalNumeros) * 100;
+            const porcentajeVendido = 100 - porcentajeDisponible; // Para llenar la barra visualmente con lo vendido o lo disponible.
+            
+            // Texto
+            document.getElementById('disponibles-text').innerText = `Quedan ${disponiblesCount} números disponibles`;
+            
+            // Barra (Llenamos la barra con lo disponible en Dorado, o invertido si prefieres)
+            // Aquí haremos que la barra represente cuánto falta por vender. Si está llena es que hay todo disponible.
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = `${porcentajeDisponible}%`;
+            
+            // Cambiar color barra si quedan pocos
+            if (porcentajeDisponible < 20) {
+                progressBar.classList.remove('bg-warning'); // o gold
+                progressBar.classList.add('bg-danger');
+            } else {
+                progressBar.style.backgroundColor = 'var(--chess-gold)';
+            }
+
+            // 2. Generar Grid
             for (let i = 1; i <= totalNumeros; i++) {
-                // Verificar si está vendido
                 const isSold = numerosVendidos.includes(i);
                 
-                // Determinar clase y atributos
                 const cssClass = isSold ? 'piece-sold' : 'piece-available';
                 const icon = 'fa-chess-pawn';
                 const statusText = isSold ? 'Vendido' : 'Disponible';
                 
-                // Crear el HTML de la casilla
+                // Onclick solo si está disponible
+                const clickAction = isSold ? '' : `onclick="toggleSelection(${i}, this)"`;
+
                 htmlContent += `
-                    <div class="chess-piece ${cssClass}" title="Número ${i} - ${statusText}">
+                    <div class="chess-piece ${cssClass}" ${clickAction} id="piece-${i}" title="Número ${i} - ${statusText}">
                         <i class="fas ${icon}"></i>
                         <span>${i}</span>
                     </div>
@@ -665,7 +775,84 @@
             }
 
             gridContainer.innerHTML = htmlContent;
+            
+            // Inicializar botones de contacto con mensaje default
+            updateContactLinks();
         });
+
+        // Función para seleccionar/deseleccionar
+        function toggleSelection(number, element) {
+            const index = selectedNumbers.indexOf(number);
+
+            if (index === -1) {
+                // Agregar
+                selectedNumbers.push(number);
+                element.classList.add('piece-selected');
+            } else {
+                // Quitar
+                selectedNumbers.splice(index, 1);
+                element.classList.remove('piece-selected');
+            }
+
+            // Ordenar para mejor lectura
+            selectedNumbers.sort((a, b) => a - b);
+
+            updateUI();
+        }
+
+        // Actualizar Barra Flotante y Enlaces
+        function updateUI() {
+            const floatingBar = document.getElementById('floating-bar');
+            const totalAmountEl = document.getElementById('total-amount');
+            const selectedNumbersTextEl = document.getElementById('selected-numbers-text');
+
+            if (selectedNumbers.length > 0) {
+                // Mostrar barra
+                floatingBar.classList.add('active');
+                
+                // Actualizar textos
+                const total = selectedNumbers.length * pricePerNumber;
+                totalAmountEl.innerText = `$${total.toLocaleString('es-CL')}`;
+                selectedNumbersTextEl.innerText = `N°: ${selectedNumbers.join(', ')}`;
+            } else {
+                // Ocultar barra
+                floatingBar.classList.remove('active');
+            }
+
+            updateContactLinks();
+        }
+
+        // Actualizar links de WhatsApp y Correo
+        function updateContactLinks() {
+            const btnWhatsapp = document.getElementById('btn-whatsapp');
+            const btnEmail = document.getElementById('btn-email');
+
+            let message = "";
+            let subject = "Comprobante Rifa Eitan";
+
+            if (selectedNumbers.length > 0) {
+                const numsStr = selectedNumbers.join(', ');
+                message = `Hola! Quiero comprar un número para la rifa de Eitan. Por favor confirmarme si aun está disponible el ${numsStr}. Ya hice la transferencia.`;
+            } else {
+                message = "Hola! Quiero comprar un número para la rifa de Eitan. Ya hice la transferencia.";
+            }
+
+            // Encode para URL
+            const encodedMessage = encodeURIComponent(message);
+            const encodedSubject = encodeURIComponent(subject);
+
+            // WhatsApp
+            btnWhatsapp.href = `https://wa.me/56990697854?text=${encodedMessage}`;
+
+            // Email
+            btnEmail.href = `mailto:jonathan.matus.vidal@gmail.com?subject=${encodedSubject}&body=${encodedMessage}`;
+        }
+
+        // Scroll suave al pago
+        function scrollToPayment() {
+            const section = document.getElementById('pago');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
     </script>
 </body>
 </html>
