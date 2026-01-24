@@ -53,65 +53,29 @@
             position: relative;
         }
 
-        /* --- FLIP CARD STYLES (Efecto Rey -> Foto) --- */
-        .flip-container {
-            background-color: transparent;
+        .profile-img-container {
             width: 200px;
             height: 200px;
             margin: 0 auto 20px;
-            perspective: 1000px; /* Necesario para el efecto 3D */
-            cursor: pointer;
-        }
-
-        .flip-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
             border-radius: 50%;
             border: 5px solid var(--chess-gold);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-        }
-
-        /* Al hacer hover o click, gira */
-        .flip-container:hover .flip-inner, 
-        .flip-container:active .flip-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-front, .flip-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 50%;
+            overflow: hidden;
+            background-color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
         }
 
-        /* Cara Frontal: Icono del Rey */
-        .flip-front {
-            background-color: var(--chess-white);
-            color: var(--chess-black);
-        }
-        .flip-front i {
-            font-size: 80px;
-        }
-
-        /* Cara Trasera: Foto de Eitan */
-        .flip-back {
-            background-color: white;
-            transform: rotateY(180deg);
-        }
-        .flip-back img {
+        .profile-img-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        /* Fallback icon if image is missing */
+        .profile-fallback {
+            font-size: 80px;
+            color: var(--chess-black);
         }
 
         .hero-title {
@@ -126,14 +90,13 @@
             padding: 60px 0;
         }
 
-        /* Títulos de Sección (Corregido centrado) */
         .section-title {
             text-align: center;
             margin-bottom: 40px;
             position: relative;
-            display: table; /* Permite centrado automático con margin: auto */
-            margin-left: auto;
-            margin-right: auto;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
         .section-title::after {
@@ -383,18 +346,10 @@
     <!-- Hero Section -->
     <header class="hero">
         <div class="container">
-            <!-- Foto de Eitan con efecto Flip -->
-            <div class="flip-container">
-                <div class="flip-inner">
-                    <!-- Frente: Rey de Ajedrez -->
-                    <div class="flip-front">
-                        <i class="fas fa-chess-king"></i>
-                    </div>
-                    <!-- Reverso: Foto de Eitan -->
-                    <div class="flip-back">
-                        <img src="img/foto.jpeg" alt="Eitan" onerror="this.src='https://via.placeholder.com/200?text=Foto+Eitan'">
-                    </div>
-                </div>
+            <!-- Foto de Eitan -->
+            <div class="profile-img-container">
+                <!-- Fallback para cuando no hay imagen, usa onerror para ocultar img rota y mostrar icono -->
+                <img src="img/foto.png" alt="Eitan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-chess-king profile-fallback\'></i>'">
             </div>
             
             <h1 class="hero-title">GRAN RIFA A BENEFICIO</h1>
@@ -417,17 +372,19 @@
                         <hr>
                         <p>Con esta rifa buscamos reunir fondos para cubrir:</p>
                         <div class="row text-center mt-4">
-                            <div class="col-6 col-md-3 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
                                 <i class="fas fa-plane fa-2x text-secondary mb-2"></i><br>Pasajes a Santiago
                             </div>
-                            <div class="col-6 col-md-3 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
                                 <i class="fas fa-taxi fa-2x text-secondary mb-2"></i><br>Traslados
                             </div>
-                            <!-- Inscripción eliminada como solicitaste -->
-                            <div class="col-6 col-md-3 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
+                                <i class="fas fa-file-signature fa-2x text-secondary mb-2"></i><br>Inscripción
+                            </div>
+                            <div class="col-6 col-md-4 mb-3">
                                 <i class="fas fa-utensils fa-2x text-secondary mb-2"></i><br>Alimentación
                             </div>
-                            <div class="col-6 col-md-3 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
                                 <i class="fas fa-hotel fa-2x text-secondary mb-2"></i><br>Estadía
                             </div>
                         </div>
@@ -580,8 +537,8 @@
         <div class="flyer-container" id="flyer">
             <h2 class="flyer-title">Gran Rifa<br>Eitan 2026</h2>
             <div class="flyer-img-box">
-                <!-- Misma lógica de imagen fallback con extensión .jpeg -->
-                <img src="img/foto.jpeg" alt="Eitan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-chess-knight fa-3x text-dark\'></i>'">
+                <!-- Misma lógica de imagen fallback -->
+                <img src="img/foto.png" alt="Eitan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-chess-knight fa-3x text-dark\'></i>'">
             </div>
             <p class="flyer-subtitle">Ayúdanos a llegar al Nacional de Ajedrez</p>
             
@@ -600,7 +557,7 @@
             <div>
                 <span style="color:white; display:block; margin-bottom:5px;">¡Compra tu número aquí! 👇</span>
                 <div style="background: white; color: black; padding: 5px 15px; border-radius: 5px; display: inline-block; font-weight: bold;">
-                    Link en la Bio
+                    Link en la descripción
                 </div>
             </div>
 
@@ -613,9 +570,8 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <!-- Cambio de clases para letras blancas -->
-            <p class="mb-2 text-white">¡Muchas gracias por compartir y apoyar!</p>
-            <small class="text-white">Rumbo al Nacional de Ajedrez 2026 ♟️✨</small>
+            <p class="mb-2">¡Muchas gracias por compartir y apoyar!</p>
+            <small class="text-muted">Rumbo al Nacional de Ajedrez 2026 ♟️✨</small>
         </div>
     </footer>
 
