@@ -327,59 +327,35 @@
             color: white;
         }
 
-        /* ESTILOS PARA EL FONDO DORADO ANIMADO */
-        @keyframes shine-gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .bg-gold-shine {
-            background: linear-gradient(-45deg, #b8860b, #d4af37, #f1c40f, #ffd700, #b8860b);
-            background-size: 400% 400%;
-            animation: shine-gradient 12s ease infinite;
-            color: #222; /* Texto oscuro para contraste */
-        }
-
-        /* Estilos Word Cloud específicos para el fondo dorado */
-        .bg-gold-shine .word-cloud-container {
-            background: rgba(255, 255, 255, 0.4); /* Fondo cristal claro */
+        /* Word Cloud Styles */
+        .word-cloud-container {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
             padding: 30px;
             border-radius: 15px;
-            border: 2px solid rgba(255,255,255,0.6);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 2px solid #444;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
         }
-        
-        .bg-gold-shine .word-cloud {
+        .word-cloud {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             gap: 15px;
         }
-
-        .bg-gold-shine .cloud-name {
-            color: #333;
+        .cloud-name {
+            color: #ccc;
             transition: all 0.3s ease;
             cursor: default;
             line-height: 1.2;
             text-align: center;
-            font-weight: 700;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+        .cloud-name:hover {
+            color: var(--chess-gold);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            transform: scale(1.1);
         }
 
-        .bg-gold-shine .cloud-name:hover {
-            color: #000;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            transform: scale(1.15);
-        }
-        
-        /* Ajuste del icono del título en esta sección */
-        .bg-gold-shine .section-title::after {
-            color: #222;
-        }
-
-        /* ESTILOS PARA EL FLYER PROMOCIONAL */
+        /* ESTILOS PARA EL FLYER PROMOCIONAL (Nuevo) */
         .flyer-container {
             background: #111;
             width: 100%;
@@ -494,7 +470,6 @@
                     <li class="nav-item"><a class="nav-link" href="#premios">Premios</a></li>
                     <li class="nav-item"><a class="nav-link" href="#numeros">Números</a></li>
                     <li class="nav-item"><a class="nav-link" href="#pago">Datos de Pago</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#agradecimientos">Agradecimientos</a></li>
                 </ul>
             </div>
         </div>
@@ -652,10 +627,6 @@
             <div class="alert alert-warning mt-4 d-inline-block mx-auto" role="alert" style="max-width: 800px;">
                 <i class="fas fa-exclamation-triangle me-2"></i> <strong>Importante:</strong> Los números se confirman una vez se ha enviado el comprobante de pago. En caso contrario, aún podrían ser tomados por alguien más.
             </div>
-
-            <div class="mt-4">
-                <p class="small fst-italic">Haz clic en los números para seleccionarlos 👇</p>
-            </div>
         </div>
     </section>
 
@@ -703,11 +674,11 @@
         </div>
     </section>
 
-    <!-- Sección Agradecimientos (NUEVA: FONDO DORADO ANIMADO) -->
-    <section id="agradecimientos" class="bg-gold-shine pt-5 pb-5">
+    <!-- Sección Agradecimientos (NUEVA) -->
+    <section id="agradecimientos" class="bg-dark text-white pt-0">
         <div class="container">
-            <h2 class="section-title">Agradecimientos</h2>
-            <p class="text-center mb-4 lead" style="max-width: 800px; margin: 0 auto; color: #1a1a1a;">
+            <h2 class="section-title text-white">Agradecimientos</h2>
+            <p class="text-center mb-4 lead" style="max-width: 800px; margin: 0 auto;">
                 Agradecemos a cada uno de quienes nos han apoyado comprando uno o más números de Rifa, estamos de corazón agradecidos con todos y deseamos que Dios les bendiga grandemente.
             </p>
             
@@ -822,7 +793,7 @@
             { nombre: "OMAR CONTRERAS", numeros: [59, 63, 64] },
             { nombre: "ROSA BARRIGA", numeros: [62, 65, 68, 70, 72] },
             { nombre: "MABEL ACOSTA", numeros: [74, 75, 76, 78, 81, 82, 83, 87, 89, 92, 93] },
-            { nombre: "SUSANA CARDENAS", numeros: [108, 118, 127, 128, 130] }
+            { nombre: "SUSANA CARDENAS", numeros: [74] }
         ];
         // ==========================================
 
