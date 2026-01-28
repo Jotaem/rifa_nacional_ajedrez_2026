@@ -327,7 +327,7 @@
             color: white;
         }
 
-        /* ESTILOS PARA EL FONDO DORADO ANIMADO */
+        /* ESTILOS PARA EL FONDO DORADO ANIMADO (Corregido: Alto Contraste) */
         @keyframes shine-gradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -344,14 +344,8 @@
                 #AA771C
             );
             background-size: 400% 400%;
-            animation: shine-gradient 16s ease infinite; /* Un poco más rápido para notar el brillo */
+            animation: shine-gradient 18s ease infinite; /* - */
             color: #222; /* Texto oscuro para contraste */
-        }
-
-        /* Ajuste del icono del título en esta sección */
-        .bg-gold-shine .section-title::after {
-            color: #222;
-            content: '❤️';
         }
 
         /* Estilos Word Cloud específicos para el fondo dorado */
@@ -390,6 +384,7 @@
         /* Ajuste del icono del título en esta sección */
         .bg-gold-shine .section-title::after {
             color: #222;
+            content: '❤️';
         }
 
         /* ESTILOS PARA EL FLYER PROMOCIONAL */
@@ -659,6 +654,10 @@
             <div class="alert alert-warning mt-4 d-inline-block mx-auto" role="alert" style="max-width: 800px;">
                 <i class="fas fa-exclamation-triangle me-2"></i> <strong>Importante:</strong> Los números se confirman una vez se ha enviado el comprobante de pago. En caso contrario, aún podrían ser tomados por alguien más.
             </div>
+
+            <div class="mt-4">
+                <p class="small fst-italic">Haz clic en los números para seleccionarlos 👇</p>
+            </div>
         </div>
     </section>
 
@@ -825,7 +824,7 @@
             { nombre: "OMAR CONTRERAS", numeros: [59, 63, 64] },
             { nombre: "ROSA BARRIGA", numeros: [62, 65, 68, 70, 72] },
             { nombre: "MABEL ACOSTA", numeros: [74, 75, 76, 78, 81, 82, 83, 87, 89, 92, 93] },
-            { nombre: "SUSANA CARDENAS", numeros: [108, 118, 127, 128, 130] }
+            { nombre: "SUSANA CARDENAS", numeros: [74] }
         ];
         // ==========================================
 
