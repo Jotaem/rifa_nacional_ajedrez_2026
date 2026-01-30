@@ -26,6 +26,7 @@
             background-color: var(--chess-white);
             color: var(--chess-black);
             padding-bottom: 60px; /* Espacio para la barra flotante */
+            overflow-x: hidden; /* Evitar scroll horizontal por confeti */
         }
 
         h1, h2, h3, h4, .navbar-brand {
@@ -158,6 +159,13 @@
             background-color: var(--chess-black);
             color: white;
         }
+
+        /* Clase corregida para el fondo negro del sorteo */
+        .bg-chess-black {
+            background-color: var(--chess-black) !important;
+            color: white;
+        }
+
         .prize-list li {
             margin-bottom: 10px;
             list-style: none;
@@ -244,20 +252,62 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
-        /* Progress Bar Custom */
+        /* Progress Bar Custom - MODIFICADO PARA CELEBRACIÓN */
         .progress-container {
-            max-width: 300px;
+            max-width: 400px;
             margin: 0 auto 30px;
+            position: relative;
         }
         .progress {
-            height: 10px;
+            height: 25px; /* Más alta */
             background-color: #e9ecef;
-            border-radius: 5px;
+            border-radius: 15px;
             overflow: hidden;
-            border: 1px solid #ccc;
+            border: 2px solid var(--chess-gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
         .progress-bar {
             background-color: var(--chess-gold);
+            font-weight: bold;
+            color: black;
+            font-size: 0.9rem;
+            line-height: 25px;
+        }
+        
+        /* Animación de Fiesta para la barra */
+        .progress-bar.celebration {
+            background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+            background-size: 400%;
+            animation: glowing 20s linear infinite;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        @keyframes glowing {
+            0% { background-position: 0 0; }
+            50% { background-position: 400% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 20;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(200px) rotate(720deg); opacity: 0; }
         }
 
         /* Floating Summary Bar */
@@ -335,7 +385,6 @@
         }
 
         .bg-gold-shine {
-            /* Usamos una paleta metálica con tonos claros y oscuros marcados para crear el efecto de brillo real */
             background: linear-gradient(120deg, 
                 #BF953F, 
                 #FCF6BA, 
@@ -344,19 +393,13 @@
                 #AA771C
             );
             background-size: 400% 400%;
-            animation: shine-gradient 16s ease infinite; /* Un poco más rápido para notar el brillo */
-            color: #222; /* Texto oscuro para contraste */
-        }
-
-        /* Ajuste del icono del título en esta sección */
-        .bg-gold-shine .section-title::after {
+            animation: shine-gradient 18s ease infinite;
             color: #222;
-            content: '❤️';
         }
 
-        /* Estilos Word Cloud específicos para el fondo dorado */
+        /* Estilos Word Cloud */
         .bg-gold-shine .word-cloud-container {
-            background: rgba(255, 255, 255, 0.4); /* Fondo cristal claro */
+            background: rgba(255, 255, 255, 0.4);
             padding: 30px;
             border-radius: 15px;
             border: 2px solid rgba(255,255,255,0.6);
@@ -387,9 +430,9 @@
             transform: scale(1.15);
         }
         
-        /* Ajuste del icono del título en esta sección */
         .bg-gold-shine .section-title::after {
             color: #222;
+            content: '❤️';
         }
 
         /* ESTILOS PARA EL FLYER PROMOCIONAL */
@@ -508,6 +551,7 @@
                     <li class="nav-item"><a class="nav-link" href="#numeros">Números</a></li>
                     <li class="nav-item"><a class="nav-link" href="#pago">Datos de Pago</a></li>
                     <li class="nav-item"><a class="nav-link" href="#agradecimientos">Agradecimientos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sorteo">Sorteo</a></li>
                 </ul>
             </div>
         </div>
@@ -536,6 +580,17 @@
             <a href="#numeros" class="btn btn-lg btn-outline-warning rounded-pill px-5">¡Quiero Apoyar!</a>
         </div>
     </header>
+
+    <!-- Audio Player (Oculto) -->
+    <audio id="bg-music" loop>
+        <source src="img/opening.mpeg" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Botón Flotante de Música (Mute/Unmute) -->
+    <button id="music-toggle" class="btn btn-warning rounded-circle shadow" style="position: fixed; bottom: 80px; right: 20px; z-index: 1001; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-volume-mute"></i>
+    </button>
 
     <!-- Sección Causa -->
     <section id="causa">
@@ -583,7 +638,8 @@
                                 <li><i class="fas fa-utensils prize-icon"></i>2 docenas de empanaditas queso carne</li>
                                 <li><i class="fas fa-utensils prize-icon"></i>1 docena de empanaditas queso carne</li>
                                 <li><i class="fas fa-tshirt prize-icon"></i>Sudadera Dragon Ball Z</li>
-                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (x2)</li>
+                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (1)</li>
+                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (2)</li>
                                 <li><i class="fas fa-wind prize-icon"></i>Mini humidificador de aire</li>
                                 <li><i class="fas fa-mobile-alt prize-icon"></i>Trípode para teléfono móvil</li>
                             </ul>
@@ -642,6 +698,9 @@
             
             <!-- Barra de Progreso y Disponibilidad -->
             <div class="progress-container">
+                <!-- Contenedor para el confeti -->
+                <div id="confetti-wrapper" class="confetti-container"></div>
+                
                 <h5 id="disponibles-text" class="fw-bold mb-2">Quedan disponibles...</h5>
                 <div class="progress">
                     <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
@@ -659,6 +718,7 @@
             <div class="alert alert-warning mt-4 d-inline-block mx-auto" role="alert" style="max-width: 800px;">
                 <i class="fas fa-exclamation-triangle me-2"></i> <strong>Importante:</strong> Los números se confirman una vez se ha enviado el comprobante de pago. En caso contrario, aún podrían ser tomados por alguien más.
             </div>
+
         </div>
     </section>
 
@@ -706,7 +766,7 @@
         </div>
     </section>
 
-    <!-- Sección Agradecimientos (NUEVA: FONDO DORADO ANIMADO) -->
+    <!-- Sección Agradecimientos (FONDO DORADO ANIMADO) -->
     <section id="agradecimientos" class="bg-gold-shine pt-5 pb-5">
         <div class="container">
             <h2 class="section-title">Agradecimientos</h2>
@@ -717,6 +777,166 @@
             <div class="word-cloud-container mt-4">
                 <div id="word-cloud" class="word-cloud">
                     <!-- La nube de nombres se genera automáticamente aquí -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN NUEVA: SORTEO Y GANADORES -->
+    <section id="sorteo" class="bg-light">
+        <div class="container">
+            <h2 class="section-title">Gran Sorteo Final</h2>
+            
+            <div class="text-center mb-5">
+                <div class="d-inline-block bg-chess-black text-white p-3 rounded-3 shadow">
+                    <h4 class="m-0"><i class="far fa-calendar-alt text-warning me-2"></i>Viernes 30 de enero • 21:30 hrs</h4>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle shadow-sm">
+                            <thead class="bg-chess-black text-white">
+                                <tr>
+                                    <th scope="col" style="width: 50%;">Premio</th>
+                                    <th scope="col" class="text-center">N° Ganador</th>
+                                    <th scope="col">Nombre del Ganador</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Premios Principales -->
+                                <tr class="table-warning fw-bold">
+                                    <td><i class="fas fa-blender text-warning me-2"></i>Picadora Eléctrica</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-microphone me-2"></i>Micrófono Lavalier K60</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-weight me-2"></i>Balanza digital inteligente</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-utensils me-2"></i>2 docenas de empanaditas</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-utensils me-2"></i>1 docena de empanaditas</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-tshirt me-2"></i>Sudadera Dragon Ball Z</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-tshirt me-2"></i>Polera de Goku (1)</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-tshirt me-2"></i>Polera de Goku (2)</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-wind me-2"></i>Mini humidificador de aire</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-mobile-alt me-2"></i>Trípode para teléfono móvil</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                
+                                <!-- Premios Medios (Desglosado) -->
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Mini linterna LED recargable</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Sable de luz LED</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Máscara de seda protección solar</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Set juguetes Montessori</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Kit de huellas para bebés</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Gafas de sol marca genérica</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>4 almohadillas de fregona</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Par de guantes de nitrilo</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Maquinilla de afeitar manual</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Batidor de huevos</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Cepillo silicona botella</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Vendaje adhesivo médico</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Rodillera para bebé</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Cubiertas desechables alimentos</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td><i class="fas fa-gift me-2"></i>Calcetines de playa (T38)</td>
+                                    <td class="text-center">-</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-muted small text-center mt-2">* Los resultados se actualizarán aquí tras el sorteo.</p>
                 </div>
             </div>
         </div>
@@ -826,18 +1046,53 @@
             { nombre: "ROSA BARRIGA", numeros: [62, 65, 68, 70, 72] },
             { nombre: "MABEL ACOSTA", numeros: [74, 75, 76, 78, 81, 82, 83, 87, 89, 92, 93] },
             { nombre: "SUSANA CARDENAS", numeros: [108, 118, 127, 128, 130] },
-            { nombre: "JAIR MOLINA", numeros: [95, 97, 106, 109, 112, 113, 114, 116, 124, 126, 129] }
+            { nombre: "JAIR MOLINA", numeros: [95, 97, 106, 109, 112, 113, 114, 116, 124, 126, 129] },
+            { nombre: "JUAN CARLOS CAMPOS", numeros: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
         ];
         // ==========================================
 
         // Generamos la lista simple de números vendidos para el tablero
-        // flatMap une todos los arrays de números en uno solo
         const numerosVendidos = listadoVentas.flatMap(venta => venta.numeros);
 
         document.addEventListener('DOMContentLoaded', function() {
             initGrid();
             initWordCloud();
+            initAudio(); // Inicializar audio
         });
+
+        function initAudio() {
+            const audio = document.getElementById('bg-music');
+            const btn = document.getElementById('music-toggle');
+            const icon = btn.querySelector('i');
+            
+            // Set volume to 20%
+            audio.volume = 0.2;
+
+            // Intentar autoplay (suave)
+            const playPromise = audio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Autoplay started!
+                    icon.className = 'fas fa-volume-up';
+                }).catch(error => {
+                    // Autoplay was prevented.
+                    // Show a UI element to let the user manually start playback.
+                    icon.className = 'fas fa-volume-mute';
+                });
+            }
+
+            // Toggle play/pause
+            btn.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play();
+                    icon.className = 'fas fa-volume-up';
+                } else {
+                    audio.pause();
+                    icon.className = 'fas fa-volume-mute';
+                }
+            });
+        }
 
         function initGrid() {
             const totalNumeros = 150;
@@ -845,23 +1100,36 @@
             let htmlContent = '';
 
             // 1. Calcular Disponibilidad y Barra de Progreso
-            const unicosVendidos = new Set(numerosVendidos);
+            // FILTRO IMPORTANTE: Solo contamos números reales (1-150) para el progreso, ignorando los "0" de donaciones
+            const numerosValidos = numerosVendidos.filter(n => n >= 1 && n <= 150);
+            const unicosVendidos = new Set(numerosValidos);
             const vendidosCount = unicosVendidos.size;
+            
             const disponiblesCount = totalNumeros - vendidosCount;
             const porcentajeDisponible = (disponiblesCount / totalNumeros) * 100;
+            const porcentajeVendido = 100 - porcentajeDisponible; // Para uso lógico
             
-            // Texto
-            document.getElementById('disponibles-text').innerText = `Quedan ${disponiblesCount} números disponibles`;
-            
-            // Barra
             const progressBar = document.getElementById('progress-bar');
-            progressBar.style.width = `${porcentajeDisponible}%`;
             
-            if (porcentajeDisponible < 20) {
-                progressBar.classList.remove('bg-warning');
-                progressBar.classList.add('bg-danger');
+            // Lógica para 100% Vendido (Celebración)
+            if (vendidosCount >= totalNumeros) {
+                document.getElementById('disponibles-text').innerText = `¡RIFA VENDIDA! GRACIAS TOTALES`;
+                progressBar.style.width = `100%`;
+                progressBar.classList.add('celebration'); // Activa animación de fiesta
+                progressBar.innerText = "¡META CUMPLIDA! 🎉";
+                
+                // Lanzar confeti en la barrita
+                launchConfetti();
             } else {
-                progressBar.style.backgroundColor = 'var(--chess-gold)';
+                document.getElementById('disponibles-text').innerText = `Quedan ${disponiblesCount} números disponibles`;
+                progressBar.style.width = `${porcentajeDisponible}%`;
+                
+                if (porcentajeDisponible < 20) {
+                    progressBar.classList.remove('bg-warning');
+                    progressBar.classList.add('bg-danger');
+                } else {
+                    progressBar.style.backgroundColor = 'var(--chess-gold)';
+                }
             }
 
             // 2. Generar Grid
@@ -885,17 +1153,29 @@
 
             gridContainer.innerHTML = htmlContent;
             
-            // Inicializar botones de contacto con mensaje default
+            // Inicializar botones de contacto
             updateContactLinks();
+        }
+
+        // Función para lanzar confeti simple (Visual CSS)
+        function launchConfetti() {
+            const container = document.getElementById('confetti-wrapper');
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetto = document.createElement('div');
+                confetto.classList.add('confetti');
+                confetto.style.left = Math.random() * 100 + '%';
+                confetto.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetto.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetto.style.animationDelay = (Math.random() * 2) + 's';
+                container.appendChild(confetto);
+            }
         }
 
         // Función para generar la Nube de Agradecimientos
         function initWordCloud() {
             const container = document.getElementById('word-cloud');
-            
-            // Ordenamos por cantidad de números para procesar tamaños, pero luego mezclamos para efecto nube? 
-            // O mejor los dejamos ordenados alfabeticamente o aleatoriamente para que se vea como nube.
-            // Vamos a ordenarlos aleatoriamente para que se vea más "nube".
             
             const shuffledVentas = [...listadoVentas].sort(() => Math.random() - 0.5);
 
@@ -903,8 +1183,6 @@
 
             shuffledVentas.forEach(venta => {
                 const cantidad = venta.numeros.length;
-                // Cálculo de tamaño: Base 0.9rem + (0.15rem * cantidad de números)
-                // Ejemplo: 1 nro = 1.05rem, 10 nros = 2.4rem
                 const fontSize = 0.8 + (cantidad * 0.15);
                 
                 htmlCloud += `<span class="cloud-name" style="font-size: ${fontSize}rem;" title="❤️ ${cantidad} números">${venta.nombre}</span>`;
