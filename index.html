@@ -524,6 +524,45 @@
             border-top: 1px solid #444;
         }
 
+        /* Estilos Carrusel Infinito El Nacional */
+        .infinite-carousel-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .infinite-carousel-track {
+            display: flex;
+            width: max-content;
+            animation: scroll-infinite 40s linear infinite;
+        }
+        
+        .carousel-item-custom {
+            width: 300px;
+            height: 200px;
+            margin-right: 20px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            border: 2px solid var(--chess-gold);
+            overflow: hidden;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .carousel-item-custom img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes scroll-infinite {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+
         /* Mobile Adjustments */
         @media (min-width: 768px) {
             .chess-grid {
@@ -552,6 +591,7 @@
                     <li class="nav-item"><a class="nav-link" href="#pago">Datos de Pago</a></li>
                     <li class="nav-item"><a class="nav-link" href="#agradecimientos">Agradecimientos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#sorteo">Sorteo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nacional">El Nacional</a></li>
                 </ul>
             </div>
         </div>
@@ -638,8 +678,7 @@
                                 <li><i class="fas fa-utensils prize-icon"></i>2 docenas de empanaditas queso carne</li>
                                 <li><i class="fas fa-utensils prize-icon"></i>1 docena de empanaditas queso carne</li>
                                 <li><i class="fas fa-tshirt prize-icon"></i>Sudadera Dragon Ball Z</li>
-                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (1)</li>
-                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (2)</li>
+                                <li><i class="fas fa-tshirt prize-icon"></i>Polera de Goku (x2)</li>
                                 <li><i class="fas fa-wind prize-icon"></i>Mini humidificador de aire</li>
                                 <li><i class="fas fa-mobile-alt prize-icon"></i>Trípode para teléfono móvil</li>
                             </ul>
@@ -942,6 +981,32 @@
         </div>
     </section>
 
+    <!-- Sección El Nacional (NUEVA) -->
+    <section id="nacional" class="bg-dark text-white">
+        <div class="container">
+            <h2 class="section-title text-white">El Nacional</h2>
+            <p class="text-center lead mb-5">Aquí pondremos las fotitos que nos tomaremos en el Nacional, gracias por apoyar</p>
+            
+            <div class="infinite-carousel-container">
+                <div class="infinite-carousel-track">
+                    <!-- Set 1 -->
+                    <div class="carousel-item-custom"><img src="img/nacional/foto1.jpg" alt="Nacional 1" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+1'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto2.jpg" alt="Nacional 2" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+2'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto3.jpg" alt="Nacional 3" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+3'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto4.jpg" alt="Nacional 4" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+4'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto5.jpg" alt="Nacional 5" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+5'"></div>
+                    
+                    <!-- Set 2 (Duplicate for loop) -->
+                    <div class="carousel-item-custom"><img src="img/nacional/foto1.jpg" alt="Nacional 1" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+1'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto2.jpg" alt="Nacional 2" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+2'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto3.jpg" alt="Nacional 3" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+3'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto4.jpg" alt="Nacional 4" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+4'"></div>
+                    <div class="carousel-item-custom"><img src="img/nacional/foto5.jpg" alt="Nacional 5" onerror="this.src='https://via.placeholder.com/300x200?text=Foto+Nacional+5'"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Zona de Captura (Flyer) -->
     <div class="container pb-5">
         <h3 class="screenshot-hint"><i class="fas fa-camera"></i> Zona de Captura para Redes Sociales</h3>
@@ -1092,6 +1157,15 @@
                     icon.className = 'fas fa-volume-mute';
                 }
             });
+            
+            // Unmute on first user interaction if muted
+            document.body.addEventListener('click', function() {
+                if(audio.paused) {
+                    audio.play().then(() => {
+                        icon.className = 'fas fa-volume-up';
+                    }).catch(e => console.log(e));
+                }
+            }, { once: true });
         }
 
         function initGrid() {
@@ -1113,7 +1187,7 @@
             
             // Lógica para 100% Vendido (Celebración)
             if (vendidosCount >= totalNumeros) {
-                document.getElementById('disponibles-text').innerText = `¡RIFA VENDIDA! GRACIAS TOTALES`;
+                document.getElementById('disponibles-text').innerText = `¡SOLD OUT! GRACIAS TOTALES`;
                 progressBar.style.width = `100%`;
                 progressBar.classList.add('celebration'); // Activa animación de fiesta
                 progressBar.innerText = "¡META CUMPLIDA! 🎉";
