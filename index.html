@@ -200,6 +200,7 @@
             position: relative;
             background-color: white;
             user-select: none;
+            overflow: hidden;
         }
 
         .chess-piece:hover {
@@ -215,6 +216,41 @@
         .chess-piece span {
             font-weight: bold;
             font-size: 0.9rem;
+        }
+
+        /* Nombres de compradores (ocultos por defecto) */
+        .buyer-name {
+            display: none;
+            font-size: 0.55rem;
+            line-height: 1.1;
+            margin-top: 2px;
+            width: 100%;
+            padding: 0 2px;
+            text-transform: uppercase;
+            text-align: center;
+            word-break: break-word;
+            color: white;
+        }
+
+        /* Modificadores cuando se activan los nombres */
+        .chess-grid.show-names .chess-piece.piece-sold {
+            justify-content: flex-start;
+            padding-top: 5px;
+        }
+
+        .chess-grid.show-names .chess-piece.piece-sold i {
+            font-size: 0.8rem;
+            margin-bottom: 0;
+            opacity: 0.7;
+        }
+
+        .chess-grid.show-names .chess-piece.piece-sold span:first-of-type {
+            font-size: 0.7rem;
+            margin-bottom: 2px;
+        }
+
+        .chess-grid.show-names .chess-piece.piece-sold .buyer-name {
+            display: block;
         }
 
         /* Estilos para piezas disponibles y vendidas */
@@ -592,6 +628,7 @@
                     <li class="nav-item"><a class="nav-link" href="#agradecimientos">Agradecimientos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#sorteo">Sorteo</a></li>
                     <li class="nav-item"><a class="nav-link" href="#nacional">El Nacional</a></li>
+                    <li class="nav-item"><a class="nav-link" href="sorteo.html">Tómbola</a></li>
                 </ul>
             </div>
         </div>
@@ -752,6 +789,17 @@
             <div class="chess-grid" id="grid-numeros">
                 <!-- Se rellena con JS -->
             </div>
+
+            <!-- Transparency Control -->
+            <div class="mt-4 mb-3 p-3 bg-light rounded border d-inline-block shadow-sm" style="max-width: 500px;">
+                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                    <input class="form-check-input me-2" type="checkbox" role="switch" id="toggleTransparency">
+                    <label class="form-check-label fw-bold" for="toggleTransparency">Ver nombres de los colaboradores</label>
+                </div>
+                <p class="small text-muted mb-0 mt-2">
+                    <i class="fas fa-info-circle me-1"></i> Para transparencia, activa el interruptor para ver quién compró cada número.
+                </p>
+            </div>
             
             <!-- Disclaimer -->
             <div class="alert alert-warning mt-4 d-inline-block mx-auto" role="alert" style="max-width: 800px;">
@@ -828,7 +876,12 @@
             
             <div class="text-center mb-5">
                 <div class="d-inline-block bg-chess-black text-white p-3 rounded-3 shadow">
-                    <h4 class="m-0"><i class="far fa-calendar-alt text-warning me-2"></i>Viernes 30 de enero • 21:30 hrs</h4>
+                    <h4 class="m-0"><i class="fas fa-check-circle text-success me-2"></i>Sorteo Realizado el 30 de enero</h4>
+                </div>
+                <div class="mt-3">
+                    <a href="https://web.facebook.com/Nani.rocker/videos/921568790824105/?idorvanity=1850278222303798" target="_blank" class="btn btn-primary rounded-pill px-4">
+                        <i class="fab fa-facebook-square me-2"></i> Ver Transmisión Grabada
+                    </a>
                 </div>
             </div>
 
@@ -846,136 +899,135 @@
                             <tbody>
                                 <!-- Premios Principales -->
                                 <tr class="table-warning fw-bold">
-                                    <td><i class="fas fa-blender text-warning me-2"></i>Picadora Eléctrica</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td><i class="fas fa-blender text-warning me-2"></i>★ PICADORA ELÉCTRICA ★</td>
+                                    <td class="text-center">7</td>
+                                    <td>AYLIN MATUS</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-microphone me-2"></i>Micrófono Lavalier K60</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">123</td>
+                                    <td>JOSE MEZA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-weight me-2"></i>Balanza digital inteligente</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">49</td>
+                                    <td>RITA CID</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-utensils me-2"></i>2 docenas de empanaditas</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">96</td>
+                                    <td>CRISTIAN ESTRADA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-utensils me-2"></i>1 docena de empanaditas</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">38</td>
+                                    <td>IVAN RIQUELME</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-tshirt me-2"></i>Sudadera Dragon Ball Z</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">67</td>
+                                    <td>SCARLETT CASTANEDA</td>
                                 </tr>
                                 <tr>
-                                    <td><i class="fas fa-tshirt me-2"></i>Polera de Goku (1)</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td><i class="fas fa-tshirt me-2"></i>Polera de Goku (Unidad 1)</td>
+                                    <td class="text-center">127</td>
+                                    <td>SUSANA CARDENAS</td>
                                 </tr>
                                 <tr>
-                                    <td><i class="fas fa-tshirt me-2"></i>Polera de Goku (2)</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td><i class="fas fa-tshirt me-2"></i>Polera de Goku (Unidad 2)</td>
+                                    <td class="text-center">3</td>
+                                    <td>CLAUDIA MARIN</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-wind me-2"></i>Mini humidificador de aire</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">34</td>
+                                    <td>IVAN RIQUELME</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-mobile-alt me-2"></i>Trípode para teléfono móvil</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">133</td>
+                                    <td>MADDELINE CUBILLOS</td>
                                 </tr>
                                 
                                 <!-- Premios Medios (Desglosado) -->
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Mini linterna LED recargable</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">6</td>
+                                    <td>CRISTIAN ESTRADA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Sable de luz LED</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">140</td>
+                                    <td>MARTIN DIAZ</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Máscara de seda protección solar</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">81</td>
+                                    <td>MABEL ACOSTA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Set juguetes Montessori</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">41</td>
+                                    <td>IVAN RIQUELME</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Kit de huellas para bebés</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">25</td>
+                                    <td>ALEJANDRO SPINOLA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Gafas de sol marca genérica</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">93</td>
+                                    <td>MABEL ACOSTA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>4 almohadillas de fregona</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">113</td>
+                                    <td>JAIR MOLINA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Par de guantes de nitrilo</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">60</td>
+                                    <td>ELENA ACOSTA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Maquinilla de afeitar manual</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">108</td>
+                                    <td>SUSANA CARDENAS</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Batidor de huevos</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">43</td>
+                                    <td>JOSE MEZA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Cepillo silicona botella</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">112</td>
+                                    <td>JAIR MOLINA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Vendaje adhesivo médico</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">45</td>
+                                    <td>ANDREA YANEZ</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Rodillera para bebé</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">57</td>
+                                    <td>ANGELICA ALIAGA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Cubiertas desechables alimentos</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">101</td>
+                                    <td>FRANCISCO RIVERA</td>
                                 </tr>
                                 <tr>
                                     <td><i class="fas fa-gift me-2"></i>Calcetines de playa (T38)</td>
-                                    <td class="text-center">-</td>
-                                    <td>-</td>
+                                    <td class="text-center">20</td>
+                                    <td>JUDITH NUNEZ</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <p class="text-muted small text-center mt-2">* Los resultados se actualizarán aquí tras el sorteo.</p>
                 </div>
             </div>
         </div>
@@ -1119,10 +1171,31 @@
         // Generamos la lista simple de números vendidos para el tablero
         const numerosVendidos = listadoVentas.flatMap(venta => venta.numeros);
 
+        // Crear un mapa para búsqueda rápida: número -> nombre
+        const numberToName = {};
+        listadoVentas.forEach(item => {
+            item.numeros.forEach(num => {
+                numberToName[num] = item.nombre;
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             initGrid();
             initWordCloud();
             initAudio(); // Inicializar audio
+            
+            // Event listener para el switch de transparencia
+            const toggle = document.getElementById('toggleTransparency');
+            if (toggle) {
+                toggle.addEventListener('change', function() {
+                    const grid = document.getElementById('grid-numeros');
+                    if (this.checked) {
+                        grid.classList.add('show-names');
+                    } else {
+                        grid.classList.remove('show-names');
+                    }
+                });
+            }
         });
 
         function initAudio() {
@@ -1213,6 +1286,7 @@
                 const cssClass = isSold ? 'piece-sold' : 'piece-available';
                 const icon = 'fa-chess-pawn';
                 const statusText = isSold ? 'Vendido' : 'Disponible';
+                const buyerName = numberToName[i] || ''; // Obtener nombre si existe
                 
                 // Onclick solo si está disponible
                 const clickAction = isSold ? '' : `onclick="toggleSelection(${i}, this)"`;
@@ -1221,6 +1295,7 @@
                     <div class="chess-piece ${cssClass}" ${clickAction} id="piece-${i}" title="Número ${i} - ${statusText}">
                         <i class="fas ${icon}"></i>
                         <span>${i}</span>
+                        <span class="buyer-name">${buyerName}</span>
                     </div>
                 `;
             }
